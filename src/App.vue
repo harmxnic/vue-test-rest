@@ -1,29 +1,83 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div class="container">
+    <Form
+        @create="pushCard"
+    />
+    <CardList
+        :cardList="cards"
+    />
   </div>
-  <router-view/>
 </template>
 
+<script>
+import Form from "@/components/Form";
+import CardList from "@/components/CardList";
+
+export default {
+  components: {
+    Form,
+    CardList
+  },
+  data() {
+    return {
+      cards: []
+    }
+  },
+  methods: {
+    pushCard(card) {
+      this.cards.push(card)
+    },
+    deleteCard(card) {
+
+    }
+  },
+}
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+  margin: 0;
+  padding: 0;
 }
 
-#nav {
-  padding: 30px;
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+.form {
+  border: 1px solid darkgoldenrod;
+  width: 50%;
+  margin: 5rem auto;
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
+  border-radius: 10px;
+  &__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  &__title, &__body {
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+  }
+  &__btn {
+    align-self: center;
+    padding: 10px;
+    color: darkgoldenrod;
+    background: transparent;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all .3s ease;
+    &:hover {
+      color: white;
+      background: firebrick;
+      border-color: lightgray;
     }
   }
 }
