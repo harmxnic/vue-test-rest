@@ -1,17 +1,21 @@
 <template>
-  <ul class="list">
+  <transition-group
+      tag="ul"
+      name="card-list"
+      class="list"
+      v-if="cards.length"
+  >
     <Card
-        v-if="cards.length"
-        v-for="card in cards.concat(cardList)"
+        v-for="card in cards"
         :key="card.id"
         :id="card.id"
         :title="card.title"
         :body="card.body"
         :card="card"
-        :deleteCard="deleteCard"
+        @remove="deleteCard"
     />
-    <li class="list__null" v-else>No items in list</li>
-  </ul>
+  </transition-group>
+  <div class="list__null" v-else>No items in list</div>
 </template>
 
 <script>
@@ -21,29 +25,17 @@ export default {
   components: {
     Card
   },
-  //TODO - совместить cardList и cards
-  //TODO - сделать сортировку
-  //TODO - вернуть delete
-  props: ['cardList'],
+  props: ['cards'],
   data() {
     return {
-      cards: []
+
     }
   },
   name: "CardList",
   methods: {
-    fetchData() {
-      fetch('https://jsonplaceholder.typicode.com/posts/1')
-          .then(res => res.json())
-          .then(res => this.cards.push(res))
-          .catch(e => console.log(e))
-    },
-    deleteCard() {
-      //this.cards = this.cards.filter(el => el.id !== card.id)
+    deleteCard(card) {
+      this.$emit('remove', card)
     }
-  },
-  mounted() {
-    this.fetchData()
   }
 }
 </script>
@@ -54,11 +46,11 @@ export default {
   flex-direction: column;
   gap: 40px;
   list-style-type: none;
-  font-family: 'Tahoma', sans-serif;
 
   &__item {
     width: 100%;
     padding: 20px;
+    box-sizing: border-box;
     border: 1px solid darkblue;
     border-radius: 10px;
     display: flex;
@@ -99,11 +91,38 @@ export default {
     font-size: 1rem;
     cursor: pointer;
     transition: all .3s ease;
+
     &:hover {
       color: white;
       background: firebrick;
       border-color: lightgray;
     }
   }
+}
+
+.card-list-item {
+  display: inline-block;
+  margin-right: 10px;
+
+}
+
+.card-list-leave-active,
+.card-list-enter-to-active {
+  transition: all .5s ease;
+  transform: translateX(30px);
+}
+
+.card-list-enter-to,
+.card-list-leave-from {
+  opacity: 1;
+  transition: all .5s ease;
+  transform: translateX(0);
+}
+
+.card-list-enter-from,
+.card-list-leave-to {
+  opacity: 0;
+  transition: all .5s ease;
+  transform: translateX(30px);
 }
 </style>

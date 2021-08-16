@@ -4,14 +4,19 @@
           <span class="list__title">{{ title }}</span>
           <span class="list__descr">{{ body }}</span>
         </span>
-    <button class="list__btn" @click="deleteCard(card)">Delete</button>
+    <button class="list__btn" @click="deleteCard">Delete</button>
   </li>
 </template>
 
 <script>
 export default {
   name: "Card",
-  props: ['title', 'body', 'deleteCard', 'card']
+  props: ['title', 'body', 'card'],
+  methods: {
+    deleteCard() {
+      this.$emit('remove', this.card)
+    }
+  }
 }
 </script>
 
